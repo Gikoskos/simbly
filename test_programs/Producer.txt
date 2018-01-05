@@ -1,0 +1,21 @@
+#PROGRAM
+	SET $item 0
+	BREQ $argc 3 LOOP
+	PRINT "Wrong number of arguments"
+	RETURN
+LOOP	ADD $item $item 1
+	PRINT "Producer: produce " $argv[0] $item
+	SLEEP $argv[2]
+	PRINT "Producer: down free " $argv[0]
+	DOWN $free
+	PRINT "Producer: put " $argv[0]
+	DOWN $mtx
+	LOAD $k $in
+	STORE $buf[$k] $item
+        ADD $k $k 1
+        MOD $k $k $argv[1]
+	STORE $in $k
+	UP $mtx
+	PRINT "Producer: up full " $argv[0]
+        UP $full
+        BRA LOOP

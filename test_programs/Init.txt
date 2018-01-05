@@ -1,0 +1,15 @@
+#PROGRAM
+	BREQ $argc 2 LSTART
+	PRINT "Wrong number of arguments"
+	RETURN
+LSTART	PRINT "Init: setting $in to 0"
+	STORE $in 0
+	PRINT "Init: setting $out to 0"
+	STORE $out 0
+	PRINT "Init: setting $mtx to 1"
+	STORE $mtx 1
+	PRINT "Init: setting $free to " $argv[1]
+	STORE $free $argv[1]
+	PRINT "Init: setting $full to " 0
+	STORE $full 0
+	RETURN

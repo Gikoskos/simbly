@@ -1,0 +1,19 @@
+#PROGRAM
+	BREQ $argc 3 LOOP
+	PRINT "Wrong number of arguments"
+	RETURN
+LOOP	PRINT "Consumer: down full " $argv[0]
+	DOWN $full
+	PRINT "Consumer: get " $argv[0]
+	DOWN $mtx
+	LOAD $k $out
+	LOAD $item $buf[$k]
+	ADD $k $k 1
+        MOD $k $k $argv[1]
+	STORE $out $k
+	UP $mtx
+	PRINT "Consumer: up free " $argv[0]
+        UP $free
+        PRINT "Consumer: consume " $argv[0] $item
+        SLEEP $argv[2]
+	BRA LOOP
