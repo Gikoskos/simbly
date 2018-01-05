@@ -1,0 +1,14 @@
+#PROGRAM
+	BREQ $argc 2 LSTART
+	PRINT "Wrong number of arguments"
+	RETURN 
+LSTART	PRINT "Hello from execution nr " $argv[0]
+	PRINT "Summing up from 1 to " $argv[1]
+	SET $n 1
+	SET $sum 0
+LOOP	BRGT $n $argv[1] LEND
+	ADD $sum $sum $n
+	ADD $n $n 1
+	BRA LOOP
+LEND	PRINT "Result is " $sum
+	RETURN

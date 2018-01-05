@@ -1,0 +1,6 @@
+#PROGRAM
+
+PRINT "a1: Statement b2 shouldn't print before this statement."
+UP $SEMB
+DOWN $SEMA
+PRINT "a2: Statement b1 shouldn't print after this statement."
