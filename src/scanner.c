@@ -552,7 +552,6 @@ int call_instruction_handler(program_s *prog, size_t len)
 
             return 1;
         } else {
-
             program_stop(prog, 1);
             err_msg(prog, "unrecognized instruction\n\t%s\n\t^", prog->input);
         }

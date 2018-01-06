@@ -175,7 +175,7 @@ int main(int argc, char **argv)
 
     /*int a[3] = {1, 2, 3};
 
-    program_s *p = program_state_init("../test_programs/Test.txt", 3, a);
+    program_s *p = program_init("../test_programs/Test.txt", 3, a);
     runtime_s *r = runtime_init();
 
     runtime_attach_program(r, p);
@@ -308,7 +308,7 @@ int main(int argc, char **argv)
                             PTH(pthread_mutex_unlock(&rt_arr[i]->lock));
                         }
 
-                        runtime_attach_program(rt_arr[rt_min_idx], program_state_init(fname, _argc, _argv));
+                        runtime_attach_program(rt_arr[rt_min_idx], program_init(fname, _argc, _argv));
                     }
 
                     free(_argv);
@@ -339,6 +339,8 @@ int main(int argc, char **argv)
                 }
             }
         } else if (!strcmp("h", word) || !strcmp("help", word)) {
+            //printing these in one call and not in a loop, to avoid having messages
+            //from running programs being printed while these are printed
             shell_msg("%s\n%s\n%s\n%s", help_msg[0], help_msg[1], help_msg[2], help_msg[3]);
         } else {
             shell_msg("unrecognized command");
@@ -347,8 +349,6 @@ int main(int argc, char **argv)
         free(line);
     }
 
-    /* unecessary cleanup slows down program shutdown
-     * but fits structured concurrency model */
     free(line);
     free(prompt_str);
 

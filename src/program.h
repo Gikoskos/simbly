@@ -31,8 +31,8 @@ typedef struct _program_s {
 } program_s;
 
 
-program_s *program_state_init(char *fname, int argc, int *argv);
-void program_state_free(program_s *p);
+program_s *program_init(char *fname, int argc, int *argv);
+void program_free(program_s *p);
 void program_stop(program_s *p, int err);
 void print_program_state(program_s *p);
 int symbol_name_cmp(const void *name1, const void *name2);

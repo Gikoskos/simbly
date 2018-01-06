@@ -43,7 +43,7 @@ void free_keyval_token(void *p)
     free(item.pData);
 }
 
-program_s *program_state_init(char *fname, int argc, int *argv)
+program_s *program_init(char *fname, int argc, int *argv)
 {
     vdsErrCode verr;
     program_s *p = NULL;
@@ -94,7 +94,7 @@ void program_stop(program_s *p, int err)
     }
 }
 
-void program_state_free(program_s *p)
+void program_free(program_s *p)
 {
     if (p) {
         QuadHash_destroy(&p->vartable, free_keyval_token, NULL);

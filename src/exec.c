@@ -29,7 +29,7 @@ static int varval_get_value(program_s *prog, token_s *tok, int *to_get);
 
 static label_data_s *insert_label_to_vartable(program_s *prog, token_s *lbl_tok);
 
-static void __dbg_print_vartable(QuadHashtable *table);
+//static void __dbg_print_vartable(QuadHashtable *table);
 
 static void load_handler(program_s *prog, instruction_id_e ins_code);
 static void store_handler(program_s *prog, instruction_id_e ins_code);
@@ -104,12 +104,16 @@ int __varval_get_value(program_s *prog, token_type_e type, varval_u *data, size_
                 int tmp_idx;
 
                 if (!__varval_get_value(prog, ((int_arr_tok_s*)data->ptr)->idx_type, &((int_arr_tok_s*)data->ptr)->idx, 0, &tmp_idx)) {
+                    free(search_key);
+                    free(data->ptr);
                     return 0;
                 }
 
                 if (tmp_idx >= prog->argv[1]) {
                     program_stop(prog, 1);
                     err_msg(prog, "tried to access area outside of argv array which is of size %d\n\t%s\n\t^", prog->argv[1], search_key);
+                    free(search_key);
+                    free(data->ptr);
                     return 0;
                 }
 
@@ -132,6 +136,9 @@ int __varval_get_value(program_s *prog, token_type_e type, varval_u *data, size_
         if (*(int*)table_data->pData == -1) {
             program_stop(prog, 1);
             err_msg(prog, "there's already a label with the same name defined\n\t%s\n\t^", search_key);
+            free(search_key);
+            if (type == INT_ARR_TOK)
+                free(data->ptr);
             return 0;
         }
 
@@ -144,6 +151,7 @@ int __varval_get_value(program_s *prog, token_type_e type, varval_u *data, size_
                 if (arr[0] > 1) {
                     program_stop(prog, 1);
                     err_msg(prog, "arrays can't be used by their names; only by their indices\n\t%s\n\t^", search_key);
+                    free(search_key);
                     return 0;
                 }
 
@@ -157,12 +165,16 @@ int __varval_get_value(program_s *prog, token_type_e type, varval_u *data, size_
                 int tmp;
 
                 if (!__varval_get_value(prog, ((int_arr_tok_s*)data->ptr)->idx_type, &((int_arr_tok_s*)data->ptr)->idx, 0, &tmp)) {
+                    free(search_key);
+                    free(data->ptr);
                     return 0;
                 }
 
                 if (tmp < 0) {
                     program_stop(prog, 1);
                     err_msg(prog, "arrays can't have negative indices\n\t%s\n\t^", search_key);
+                    free(search_key);
+                    free(data->ptr);
                     return 0;
                 }
 
@@ -209,12 +221,16 @@ int __varval_get_value(program_s *prog, token_type_e type, varval_u *data, size_
                 int tmp;
 
                 if (!__varval_get_value(prog, ((int_arr_tok_s*)data->ptr)->idx_type, &((int_arr_tok_s*)data->ptr)->idx, 0, &tmp)) {
+                    free(search_key);
+                    free(data->ptr);
                     return 0;
                 }
 
                 if (tmp < 0) {
                     program_stop(prog, 1);
                     err_msg(prog, "arrays can't have negative indices\n\t%s\n\t^", search_key);
+                    free(search_key);
+                    free(data->ptr);
                     return 0;
                 }
 
@@ -291,6 +307,9 @@ int __varval_set_value(program_s *prog, token_type_e type, varval_u *data, size_
         if (*(int*)table_data->pData == -1) {
             program_stop(prog, 1);
             err_msg(prog, "there's already a label with the same name defined\n\t%s\n\t^", search_key);
+            free(search_key);
+            if (type == INT_ARR_TOK)
+                free(data->ptr);
             return 0;
         }
 
@@ -303,6 +322,7 @@ int __varval_set_value(program_s *prog, token_type_e type, varval_u *data, size_
                 if (arr[0] > 1) {
                     program_stop(prog, 1);
                     err_msg(prog, "arrays can't be used by their names; only by their indices\n\t%s\n\t^", search_key);
+                    free(search_key);
                     return 0;
                 }
 
@@ -316,12 +336,16 @@ int __varval_set_value(program_s *prog, token_type_e type, varval_u *data, size_
                 int tmp;
 
                 if (!__varval_get_value(prog, ((int_arr_tok_s*)data->ptr)->idx_type, &((int_arr_tok_s*)data->ptr)->idx, 0, &tmp)) {
+                    free(search_key);
+                    free(data->ptr);
                     return 0;
                 }
 
                 if (tmp < 0) {
                     program_stop(prog, 1);
                     err_msg(prog, "arrays can't have negative indices\n\t%s\n\t^", search_key);
+                    free(search_key);
+                    free(data->ptr);
                     return 0;
                 }
 
@@ -367,12 +391,16 @@ int __varval_set_value(program_s *prog, token_type_e type, varval_u *data, size_
                 int tmp;
 
                 if (!__varval_get_value(prog, ((int_arr_tok_s*)data->ptr)->idx_type, &((int_arr_tok_s*)data->ptr)->idx, 0, &tmp)) {
+                    free(search_key);
+                    free(data->ptr);
                     return 0;
                 }
 
                 if (tmp < 0) {
                     program_stop(prog, 1);
                     err_msg(prog, "arrays can't have negative indices\n\t%s\n\t^", search_key);
+                    free(search_key);
+                    free(data->ptr);
                     return 0;
                 }
 
@@ -509,7 +537,7 @@ void interpret_next_line(program_s *prog)
         }
     }
 }
-
+/*
 void __dbg_print_vartable(QuadHashtable *table)
 {
     for (unsigned int i = 0; i < table->size; i++) {
@@ -536,7 +564,7 @@ void __dbg_print_vartable(QuadHashtable *table)
         putchar('\n');
     }
 }
-
+*/
 void load_handler(program_s *prog, instruction_id_e ins_code)
 {
     (void)ins_code;
@@ -859,7 +887,7 @@ void print_handler(program_s *prog, instruction_id_e ins_code)
     token_s *tok;
     int tmp;
 
-    PTH(pthread_mutex_unlock(&print_lock));
+    PTH(pthread_mutex_lock(&print_lock));
     printf("%sProgram %d says:%s", TERM_BONW, prog->argv[0], TERM_RESET);
 
     while (1) {

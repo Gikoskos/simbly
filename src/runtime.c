@@ -121,7 +121,7 @@ void *runtime_thread(void *param)
 
                 rt->program_cnt--;
                 CDLList_deleteNode(&rt->program_list, rt->curr->prv, NULL);
-                program_state_free(prog);
+                program_free(prog);
                 pthread_mutex_unlock(&rt->lock);
 
                 if (!rt->program_list) {
@@ -190,7 +190,7 @@ void prog_free_cb(void *data)
 {
     program_s *p = (program_s *)data;
 
-    program_state_free(p);
+    program_free(p);
 }
 
 void runtime_stop(runtime_s *rt)

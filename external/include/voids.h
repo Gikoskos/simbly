@@ -13,6 +13,8 @@
 
 #include "voids/Common.h"
 
+#include "voids/RandomState.h"
+#include "voids/HeapAllocation.h"
 #include "voids/SinglyLinkedList.h"
 #include "voids/DoublyLinkedList.h"
 #include "voids/SentinelSinglyLinkedList.h"
@@ -30,6 +32,7 @@
 #include "voids/AVLTree.h"
 #include "voids/Treap.h"
 #include "voids/RedBlackTree.h"
+#include "voids/SplayTree.h"
 #include "voids/FIFOqueue.h"
 #include "voids/LIFOstack.h"
 #include "voids/BinaryTreeHeap.h"

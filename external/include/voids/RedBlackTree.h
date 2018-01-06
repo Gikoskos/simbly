@@ -19,48 +19,48 @@ extern "C" {
 #include "Common.h"
 
 
-typedef struct _RedBlackTreeNode {
+typedef struct _RBTreeNode {
     KeyValuePair item;
-    struct _RedBlackTreeNode *left, *right, *parent;
+    struct _RBTreeNode *left, *right, *parent;
     char color;
-} RedBlackTreeNode;
+} RBTreeNode;
 
-typedef struct _RedBlackTree {
-    RedBlackTreeNode *root, *nil;
+typedef struct _RBTree {
+    RBTreeNode *root, *nil;
     vdsUserCompareFunc KeyCmp;
-} RedBlackTree;
+} RBTree;
 
 
-VOIDS_API RedBlackTree *RBTree_init(vdsUserCompareFunc KeyCmp,
+VOIDS_API RBTree *RBTree_init(vdsUserCompareFunc KeyCmp,
+                              vdsErrCode *err);
+
+VOIDS_API RBTreeNode *RBTree_insert(RBTree *rbt,
+                                    void *pKey,
+                                    void *pData,
                                     vdsErrCode *err);
 
-VOIDS_API RedBlackTreeNode *RBTree_insert(RedBlackTree *rbt,
-                                          void *pKey,
-                                          void *pData,
-                                          vdsErrCode *err);
-
-VOIDS_API KeyValuePair RBTree_deleteNode(RedBlackTree *rbt,
-                                         RedBlackTreeNode *rbtToDelete,
+VOIDS_API KeyValuePair RBTree_deleteNode(RBTree *rbt,
+                                         RBTreeNode *rbtToDelete,
                                          vdsErrCode *err);
 
-VOIDS_API KeyValuePair RBTree_deleteByKey(RedBlackTree *rbt,
+VOIDS_API KeyValuePair RBTree_deleteByKey(RBTree *rbt,
                                           void *pKey,
                                           vdsErrCode *err);
 
-VOIDS_API RedBlackTreeNode *RBTree_findNode(RedBlackTree *rbt,
-                                            void *pKey,
-                                            vdsErrCode *err);
+VOIDS_API RBTreeNode *RBTree_findNode(RBTree *rbt,
+                                      void *pKey,
+                                      vdsErrCode *err);
 
-VOIDS_API void *RBTree_findData(RedBlackTree *rbt,
+VOIDS_API void *RBTree_findData(RBTree *rbt,
                                 void *pKey,
                                 vdsErrCode *err);
 
-VOIDS_API void RBTree_traverse(RedBlackTree *rbt,
+VOIDS_API void RBTree_traverse(RBTree *rbt,
                                vdsTreeTraversal traversal,
                                vdsUserDataFunc callback,
                                vdsErrCode *err);
 
-VOIDS_API void RBTree_destroy(RedBlackTree **rbt,
+VOIDS_API void RBTree_destroy(RBTree **rbt,
                               vdsUserDataFunc freeData,
                               vdsErrCode *err);
 
