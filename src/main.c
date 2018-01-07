@@ -149,7 +149,7 @@ void mark_program_as_finished(runtime_s **rt_arr, int rt_cnt, int id)
 void print_banner(const char *banner)
 {
     size_t i, j, c = 0, len = strlen(banner);
-    struct timespec sleeping_time = {0, 10 * 1000000};
+    struct timespec sleeping_time = {0, 10000000};
 
     for (i = 0; i < 3; i++) {
         for (j = 0; j < (2*len); j++) {

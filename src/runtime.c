@@ -66,7 +66,17 @@ void *runtime_thread(void *param)
 
                         ENO(clock_gettime(CLOCK_REALTIME, &end_time));
 
-                        diff = end_time.tv_nsec - start_time.tv_nsec;
+                        if (start_time.tv_sec != end_time.tv_sec) {
+                            time_t sec_diff = end_time.tv_sec - start_time.tv_sec;
+
+                            if (sec_diff > 1) {
+                                break;
+                            } else {
+                                diff = start_time.tv_nsec - end_time.tv_nsec;
+                            }
+                        } else {
+                            diff = end_time.tv_nsec - start_time.tv_nsec;
+                        }
 
                         if (diff < 0) {
                             break;
