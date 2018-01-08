@@ -1,0 +1,51 @@
+#PROGRAM
+
+DOWN $mtx
+LOAD $eax $wrs
+LOAD $ebx $ww
+ADD $eax $ebx $eax
+BRLE $eax 0 LNOWAITINQUEUE
+LOAD $eax $rw
+ADD $eax $eax 1
+STORE $rw $eax
+UP $mtx
+DOWN $rq
+LOAD $eax $rw
+BRLE $eax 0 LNOWAKEUPREADER
+SUB $eax $eax 1
+STORE $rw $eax
+LOAD $eax $rds
+ADD $eax $eax 1
+STORE $rds $eax
+UP $rq
+BRA LENTERCS
+LNOWAKEUPREADER UP $mtx
+BRA LENTERCS
+
+LNOWAITINQUEUE LOAD $eax $rds
+ADD $eax $eax 1
+STORE $rds $eax
+UP $mtx
+
+LENTERCS PRINT "Reader is in the critical section. Will sleep for 2 seconds."
+SLEEP 2
+
+DOWN $mtx
+
+LOAD $eax $rds
+SUB $eax $eax 1
+STORE $rds $eax
+BREQ $eax 0 LNOREADERSLEFT
+UP $mtx
+RETURN
+LNOREADERSLEFT LOAD $eax $ww
+BRGT $eax 0 LWAKEUPWRITER
+UP $mtx
+RETURN
+
+LWAKEUPWRITER SUB $eax $eax 1
+STORE $ww $eax
+LOAD $eax $wrs
+ADD $eax $eax 1
+STORE $wrs $eax
+UP $wq
