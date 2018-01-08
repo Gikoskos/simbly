@@ -60,11 +60,11 @@ void *runtime_thread(void *param)
                     //printf("\nProgram %d is being executed!\n", prog->argv[0]);
                     do {
 
-                        ENO(clock_gettime(CLOCK_REALTIME, &start_time));
+                        ENO(clock_gettime(CLOCK_THREAD_CPUTIME_ID, &start_time));
 
                         interpret_next_line(prog);
 
-                        ENO(clock_gettime(CLOCK_REALTIME, &end_time));
+                        ENO(clock_gettime(CLOCK_THREAD_CPUTIME_ID, &end_time));
 
                         if (start_time.tv_sec != end_time.tv_sec) {
                             time_t sec_diff = end_time.tv_sec - start_time.tv_sec;

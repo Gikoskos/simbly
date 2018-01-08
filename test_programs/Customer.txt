@@ -1,0 +1,11 @@
+#PROGRAM
+    DOWN $mtx
+    PRINT "New customer is here!"
+    LOAD $tmp $avl
+    ADD $tmp $tmp 1
+    STORE $avl $tmp
+    BRGT $tmp 0 LNOWAKEUP
+    PRINT "Customer wakes up barber"
+    UP $sleep
+LNOWAKEUP UP $mtx
+    RETURN

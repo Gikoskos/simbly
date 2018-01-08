@@ -1,0 +1,18 @@
+#PROGRAM
+    STORE $mtx 1
+    STORE $sleep 0
+
+LBARBERLOOP DOWN $mtx
+    LOAD $tmp $avl
+    SUB $tmp $tmp 1
+    STORE $avl $tmp
+    BRGE $tmp 0 LCUSTOMERISHERE
+    PRINT "Barber sleeps until new customer"
+    UP $mtx
+    DOWN $sleep
+    DOWN $mtx
+LCUSTOMERISHERE PRINT "Barber picks up next customer"
+    UP $mtx
+    PRINT "Barber cuts hair for 4 seconds"
+    SLEEP 4
+    BRA LBARBERLOOP
