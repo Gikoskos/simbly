@@ -727,6 +727,10 @@ void branch_handler(program_s *prog, instruction_id_e ins_code)
                     instruction_array[ins_code].name_str);
         }
 
+        if (prog->c == EOF || prog->state == LAST_LINE) {
+            prog->state = INSTRUCTION_LINE;
+        }
+
     } else {
         program_stop(prog, 1);
         err_msg(prog, "%s instruction expects a label as its last argument",
