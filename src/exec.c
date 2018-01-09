@@ -104,16 +104,12 @@ int __varval_get_value(program_s *prog, token_type_e type, varval_u *data, size_
                 int tmp_idx;
 
                 if (!__varval_get_value(prog, ((int_arr_tok_s*)data->ptr)->idx_type, &((int_arr_tok_s*)data->ptr)->idx, 0, &tmp_idx)) {
-                    free(search_key);
-                    free(data->ptr);
                     return 0;
                 }
 
                 if (tmp_idx >= prog->argv[1]) {
                     program_stop(prog, 1);
                     err_msg(prog, "tried to access area outside of argv array which is of size %d\n\t%s\n\t^", prog->argv[1], search_key);
-                    free(search_key);
-                    free(data->ptr);
                     return 0;
                 }
 
@@ -136,9 +132,6 @@ int __varval_get_value(program_s *prog, token_type_e type, varval_u *data, size_
         if (*(int*)table_data->pData == -1) {
             program_stop(prog, 1);
             err_msg(prog, "there's already a label with the same name defined\n\t%s\n\t^", search_key);
-            free(search_key);
-            if (type == INT_ARR_TOK)
-                free(data->ptr);
             return 0;
         }
 
@@ -151,7 +144,6 @@ int __varval_get_value(program_s *prog, token_type_e type, varval_u *data, size_
                 if (arr[0] > 1) {
                     program_stop(prog, 1);
                     err_msg(prog, "arrays can't be used by their names; only by their indices\n\t%s\n\t^", search_key);
-                    free(search_key);
                     return 0;
                 }
 
@@ -165,16 +157,12 @@ int __varval_get_value(program_s *prog, token_type_e type, varval_u *data, size_
                 int tmp;
 
                 if (!__varval_get_value(prog, ((int_arr_tok_s*)data->ptr)->idx_type, &((int_arr_tok_s*)data->ptr)->idx, 0, &tmp)) {
-                    free(search_key);
-                    free(data->ptr);
                     return 0;
                 }
 
                 if (tmp < 0) {
                     program_stop(prog, 1);
                     err_msg(prog, "arrays can't have negative indices\n\t%s\n\t^", search_key);
-                    free(search_key);
-                    free(data->ptr);
                     return 0;
                 }
 
@@ -221,16 +209,12 @@ int __varval_get_value(program_s *prog, token_type_e type, varval_u *data, size_
                 int tmp;
 
                 if (!__varval_get_value(prog, ((int_arr_tok_s*)data->ptr)->idx_type, &((int_arr_tok_s*)data->ptr)->idx, 0, &tmp)) {
-                    free(search_key);
-                    free(data->ptr);
                     return 0;
                 }
 
                 if (tmp < 0) {
                     program_stop(prog, 1);
                     err_msg(prog, "arrays can't have negative indices\n\t%s\n\t^", search_key);
-                    free(search_key);
-                    free(data->ptr);
                     return 0;
                 }
 
@@ -280,7 +264,6 @@ int __varval_set_value(program_s *prog, token_type_e type, varval_u *data, size_
             if (!strcmp("argc", search_key)) {
                 program_stop(prog, 1);
                 err_msg(prog, "the value of argc is constant; setting it to another value isn't allowed\n\t%s\n\t^", search_key);
-                free(search_key);
                 return 0;
             }
             break;
@@ -291,8 +274,6 @@ int __varval_set_value(program_s *prog, token_type_e type, varval_u *data, size_
             if (!strcmp("argv", search_key)) {
                 program_stop(prog, 1);
                 err_msg(prog, "the value of argv is constant; setting it to another value isn't allowed\n\t%s\n\t^", search_key);
-                free(search_key);
-                free(data->ptr);
                 return 0;
             }
             break;
@@ -307,9 +288,6 @@ int __varval_set_value(program_s *prog, token_type_e type, varval_u *data, size_
         if (*(int*)table_data->pData == -1) {
             program_stop(prog, 1);
             err_msg(prog, "there's already a label with the same name defined\n\t%s\n\t^", search_key);
-            free(search_key);
-            if (type == INT_ARR_TOK)
-                free(data->ptr);
             return 0;
         }
 
@@ -322,7 +300,6 @@ int __varval_set_value(program_s *prog, token_type_e type, varval_u *data, size_
                 if (arr[0] > 1) {
                     program_stop(prog, 1);
                     err_msg(prog, "arrays can't be used by their names; only by their indices\n\t%s\n\t^", search_key);
-                    free(search_key);
                     return 0;
                 }
 
@@ -336,16 +313,12 @@ int __varval_set_value(program_s *prog, token_type_e type, varval_u *data, size_
                 int tmp;
 
                 if (!__varval_get_value(prog, ((int_arr_tok_s*)data->ptr)->idx_type, &((int_arr_tok_s*)data->ptr)->idx, 0, &tmp)) {
-                    free(search_key);
-                    free(data->ptr);
                     return 0;
                 }
 
                 if (tmp < 0) {
                     program_stop(prog, 1);
                     err_msg(prog, "arrays can't have negative indices\n\t%s\n\t^", search_key);
-                    free(search_key);
-                    free(data->ptr);
                     return 0;
                 }
 
@@ -391,16 +364,12 @@ int __varval_set_value(program_s *prog, token_type_e type, varval_u *data, size_
                 int tmp;
 
                 if (!__varval_get_value(prog, ((int_arr_tok_s*)data->ptr)->idx_type, &((int_arr_tok_s*)data->ptr)->idx, 0, &tmp)) {
-                    free(search_key);
-                    free(data->ptr);
                     return 0;
                 }
 
                 if (tmp < 0) {
                     program_stop(prog, 1);
                     err_msg(prog, "arrays can't have negative indices\n\t%s\n\t^", search_key);
-                    free(search_key);
-                    free(data->ptr);
                     return 0;
                 }
 
@@ -437,7 +406,11 @@ int varval_set_value(program_s *prog, token_s *tok, int to_set)
     ret = __varval_set_value(prog, tok->type, &tok->data, tok->len, to_set);
     RESET_PARSER_IDX(prog);
 
-    free(tok);
+    if (ret) {
+        free(tok);
+    } else {
+        free_token(tok);
+    }
 
     return ret;
 }
@@ -450,7 +423,11 @@ int varval_get_value(program_s *prog, token_s *tok, int *to_get)
     ret = __varval_get_value(prog, tok->type, &tok->data, tok->len, to_get);
     RESET_PARSER_IDX(prog);
 
-    free(tok);
+    if (ret) {
+        free(tok);
+    } else {
+        free_token(tok);
+    }
 
     return ret;
 }

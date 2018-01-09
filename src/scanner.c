@@ -41,6 +41,7 @@ static void sleep_handler(program_s *prog, instruction_id_e ins_code);
 static void print_handler(program_s *prog, instruction_id_e ins_code);
 static void return_handler(program_s *prog, instruction_id_e ins_code);
 
+static void free_int_arr_tok(int_arr_tok_s *arr_tok);
 static int parse_varval_token(program_s *prog, size_t start_idx, token_type_e *type,
                               varval_u *tok_data, int is_array_idx, unsigned int *depth);
 
@@ -217,7 +218,7 @@ int parse_varval_token(program_s *prog, size_t start_idx, token_type_e *type,
                     ptr.ptr = (void*)&prog->input[start_idx + 1];
 
                     if (!is_array_idx) {
-                        add_new_token(prog, ptr.ptr, 0, offset - 1, INT_VAR_TOK, 0);
+                        add_new_token(prog, ptr.ptr, 0, offset, INT_VAR_TOK, 0);
                     } else {
                         char *name;
                         ENO(name = malloc(sizeof(char) * (offset + 1)));
@@ -504,7 +505,7 @@ void add_new_token(program_s *prog, void *ptr, int value,
 void free_int_arr_tok(int_arr_tok_s *arr_tok)
 {
     if (arr_tok) {
-        int_arr_tok_s *curr = arr_tok, *prev;
+        int_arr_tok_s *curr = arr_tok, *prev = NULL;
 
         while (1) {
 
@@ -516,6 +517,7 @@ void free_int_arr_tok(int_arr_tok_s *arr_tok)
             } else {
                 if (curr->idx_type != INT_VAL_TOK)
                     free(curr->idx.ptr);
+                free(curr->name);
                 free(curr);
                 break;
             }
