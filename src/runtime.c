@@ -18,14 +18,14 @@ void *runtime_thread(void *param)
     long int diff, time_slice;
 
     while (rt->running) {
-        pthread_mutex_lock(&rt->lock);
+        PTH(pthread_mutex_lock(&rt->lock));
 
         while (rt->running && !rt->program_list) {
-            pthread_cond_wait(&rt->list_not_empty, &rt->lock);
+            PTH(pthread_cond_wait(&rt->list_not_empty, &rt->lock));
         }
 
         rt->curr = rt->program_list;
-        pthread_mutex_unlock(&rt->lock);
+        PTH(pthread_mutex_unlock(&rt->lock));
 
         program_s *prog;
 
@@ -122,17 +122,20 @@ void *runtime_thread(void *param)
             }
 
             if (prog->state == FINISHED || prog->error_flag) {
+                pthread_mutex_lock(&print_lock);
                 if (prog->error_flag)
                     shell_msg("Program %d was killed unexpectedly", prog->argv[0]);
                 else
                     shell_msg("Program %d finished", prog->argv[0]);
-                pthread_mutex_lock(&rt->lock);
+                pthread_mutex_unlock(&print_lock);
+
+                PTH(pthread_mutex_lock(&rt->lock));
                 rt->curr = rt->curr->nxt;
 
                 rt->program_cnt--;
                 CDLList_deleteNode(&rt->program_list, rt->curr->prv, NULL);
                 program_free(prog);
-                pthread_mutex_unlock(&rt->lock);
+                PTH(pthread_mutex_unlock(&rt->lock));
 
                 if (!rt->program_list) {
                     rt->curr = NULL;
@@ -140,9 +143,9 @@ void *runtime_thread(void *param)
             } else {
                 /* only reason for locking here is to make the 'list' command work
                  * properly. without the 'list' command, this locking can be removed */
-                pthread_mutex_lock(&rt->lock);
+                PTH(pthread_mutex_lock(&rt->lock));
                 rt->curr = rt->curr->nxt;
-                pthread_mutex_unlock(&rt->lock);
+                PTH(pthread_mutex_unlock(&rt->lock));
             }
 
         }

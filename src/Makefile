@@ -5,7 +5,7 @@ LINKER = -L../external -lvoids64 -lm
 SRC = $(wildcard *.c)
 HDR = $(wildcard *.h)
 
-EXE = ../simbly
+EXE = simbly
 
 $(EXE): $(SRC) $(HDR)
 	$(CC) $(CFLAGS) $(SRC) -o $@ $(LINKER)

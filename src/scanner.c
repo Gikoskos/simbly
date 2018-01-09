@@ -211,16 +211,18 @@ int parse_varval_token(program_s *prog, size_t start_idx, token_type_e *type,
                         *type = INT_VAR_TOK;
                     }
 
+                    size_t offset = i - start_idx;
+
                     success = 1;
                     ptr.ptr = (void*)&prog->input[start_idx + 1];
 
                     if (!is_array_idx) {
-                        add_new_token(prog, ptr.ptr, 0, i - start_idx, INT_VAR_TOK, 0);
+                        add_new_token(prog, ptr.ptr, 0, offset - 1, INT_VAR_TOK, 0);
                     } else {
                         char *name;
-                        ENO(name = malloc(sizeof(char) * (i - start_idx + 1)));
-                        memcpy(name, ptr.ptr, i - start_idx);
-                        name[i - start_idx] = 0;
+                        ENO(name = malloc(sizeof(char) * (offset + 1)));
+                        memcpy(name, ptr.ptr, offset - 1);
+                        name[offset - 1] = 0;
                         ptr.ptr = name;
                     }
 
@@ -353,7 +355,6 @@ void parse_magic(program_s *prog)
 {
     size_t i, len = ARRAY_LEN(magic_bytes);
 
-    //@FIXME: This should be a compile-time static assertion, not a runtime check
     ASRT(len <= ARRAY_LEN(prog->input));
 
     for (i = 0; i < len; i++) {
@@ -500,6 +501,28 @@ void add_new_token(program_s *prog, void *ptr, int value,
     }
 }
 
+void free_int_arr_tok(int_arr_tok_s *arr_tok)
+{
+    if (arr_tok) {
+        int_arr_tok_s *curr = arr_tok, *prev;
+
+        while (1) {
+
+            if (curr->idx_type == INT_ARR_TOK) {
+                prev = curr;
+                curr = (int_arr_tok_s*)curr->idx.ptr;
+                free(prev->name);
+                free(prev);
+            } else {
+                if (curr->idx_type != INT_VAL_TOK)
+                    free(curr->idx.ptr);
+                free(curr);
+                break;
+            }
+        }
+    }
+}
+
 void free_token(void *p)
 {
     token_s *tok = (token_s*)p;
@@ -513,24 +536,7 @@ void free_token(void *p)
             free((void*)tok->data.ptr);
 
         } else if (tok->type == INT_ARR_TOK) {
-            int_arr_tok_s *curr, *prev, *tmp = (int_arr_tok_s*)tok->data.ptr;
-
-            curr = tmp;
-
-            while (1) {
-
-                if (curr->idx_type == INT_ARR_TOK) {
-                    prev = curr;
-                    curr = (int_arr_tok_s*)curr->idx.ptr;
-                    free(prev->name);
-                    free(prev);
-                } else {
-                    if (curr->idx_type != INT_VAL_TOK)
-                        free(curr->idx.ptr);
-                    free(curr);
-                    break;
-                }
-            }
+            free_int_arr_tok((int_arr_tok_s*)tok->data.ptr);
         }
 
         free(tok);
@@ -864,18 +870,11 @@ void print_handler(program_s *prog, instruction_id_e ins_code)
             break;
 
     }
-
-    //flush_up_to_newline(prog);
 }
 
 void return_handler(program_s *prog, instruction_id_e ins_code)
 {
     (void)ins_code;(void)prog;
-
-    /*if (flush_up_to_char(prog)) {
-        warn_msg(prog, "characters after a %s statement will be ignored",
-                 instruction_array[RETURN_SYM].name_str);
-    }*/
 }
 
 void lexer_init(void)

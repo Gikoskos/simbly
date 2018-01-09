@@ -38,5 +38,6 @@ void lexer_destroy(void);
 void parse_magic(program_s *prog);
 void tokenize_next_line(program_s *prog);
 void free_token(void *p);
+void free_int_arr_tok(int_arr_tok_s *arr_tok);
 
 #endif //SIMBLY_SCANNER_H__

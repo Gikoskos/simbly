@@ -46,4 +46,6 @@ typedef struct _label_data_s {
 void interpret_next_line(program_s *prog);
 void exec_init(void);
 
+extern pthread_mutex_t print_lock;
+
 #endif //SIMBLY_EXEC_H__

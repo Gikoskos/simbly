@@ -1,11 +1,5 @@
 #PROGRAM
-PRINT "hello" $a[$b[15]]
+La PRINT "hello"
 SET $b[5] 15
-SET $a[10] 41
-LOL PRINT "b[5] = " $b[5]
-PRINT "a[10] = " $a[10]
-SUB $b[5] $b[5] $a[10]
-
-
-
-BRGT $b[5] -100 LOL
+SET $a[$b[5]] 41
+PRINT "test" $a[$b[5]] $abc[$La[4]]
