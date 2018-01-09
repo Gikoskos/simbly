@@ -5,7 +5,6 @@
 #include "scanner.h"
 #include "global.h"
 #include "error.h"
-#include <pwd.h>
 #include <unistd.h>
 #include <sys/sysinfo.h>
 
@@ -22,20 +21,16 @@ const char *help_msg[] = {
 
 
 
-char *read_line(const char *prompt)
+char *read_line(void)
 {
     char *buff = NULL;
     size_t idx = 0;
     size_t curr_size = 0;
     int c;
 
-    if (prompt) {
-        printf("%s ", prompt);
-    }
-
     while ( ((c = fgetc(stdin)) != EOF) && isspace(c) ) {
-        if ((c == '\n') && prompt)
-            printf("%s ", prompt);
+        if (c == '\n')
+            shell_msg("empty input");
     }
 
     if (!feof(stdin)) {
@@ -89,23 +84,6 @@ char *read_line(const char *prompt)
     }
 
     return buff;
-}
-
-char *make_prompt_str(void)
-{
-    size_t prompt_len;
-    char *prompt_append = "@<simbly>:", *prompt;
-    struct passwd *user_id;
-
-    ENO(user_id = getpwuid(getuid()));
-
-    prompt_len = strlen(user_id->pw_name) + strlen(prompt_append) + 1;
-
-    ENO(prompt = malloc(sizeof(char) * prompt_len));
-
-    snprintf(prompt, prompt_len, "%s%s", user_id->pw_name, prompt_append);
-
-    return prompt;
 }
 
 void mark_program_as_finished(runtime_s **rt_arr, int rt_cnt, int id)
@@ -173,27 +151,15 @@ int main(int argc, char **argv)
 
     exec_init();
 
-    /*int a[3] = {1, 2, 3};
-
-    program_s *p = program_init("../test_programs/Test.txt", 3, a);
-    runtime_s *r = runtime_init();
-
-    runtime_attach_program(r, p);
-    getchar();
-    runtime_stop(r);*/
-
     char *word, *line, *saveptr;
     runtime_s **rt_arr;
     int rt_cnt, rt_min_idx;
-    char *prompt_str;
 
     rt_cnt = get_nprocs();
 
     if (rt_cnt <= 1) {
         rt_cnt = DEFAULT_THREAD_NUM;
     }
-
-    prompt_str = make_prompt_str();
 
     ENO(rt_arr = malloc(sizeof(runtime_s*) * rt_cnt));
 
@@ -205,7 +171,7 @@ int main(int argc, char **argv)
     printf("\nEnter a command, or 'help' to see a list of available commands\n\n");
 
     while (1) {
-        line = read_line(NULL/*prompt_str*/);
+        line = read_line();
 
         word = strtok_r(line, " ", &saveptr);
 
@@ -350,7 +316,6 @@ int main(int argc, char **argv)
     }
 
     free(line);
-    free(prompt_str);
 
     for (int i = 0; i < rt_cnt; i++) {
         runtime_stop(rt_arr[i]);

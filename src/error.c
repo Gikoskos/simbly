@@ -127,7 +127,7 @@ void shell_msg(const char *fmt, ...)
 {
     va_list args;
 
-    fprintf(stdout, "%s", TERM_MAG);
+    fprintf(stdout, "%s", TERM_YEL);
 
     va_start(args, fmt);
     vfprintf(stdout, fmt, args);

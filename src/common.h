@@ -28,8 +28,8 @@
 #define MAKE_STR(x) #x
 
 #define TERM_RED  "\x1B[31m"
-#define TERM_YEL  "\x1B[33m"
-#define TERM_MAG  "\x1B[35m"
+#define TERM_YEL  "\x1B[93m"
+#define TERM_MAG  "\x1B[38m"
 #define TERM_CYAN  "\x1B[36m"
 #define TERM_YONR  "\x1b[94;41m"
 #define TERM_BONW  "\x1B[30;47m"
