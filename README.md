@@ -6,6 +6,8 @@ In the pic below you can see, on the left column, the grammar of the language, a
 
 ![](https://i.imgur.com/KgMjhTy.png) 
 
+There are no functions or support for any kind of a call stack.
+
 All programs have their own local variables that they can operate on, sort of like registers. There are also global variables that all programs can read and write to, sort of like a RAM.
 
 All variables are defined when they are first used. If no value is assigned to them they will be initialized with the value 0. In this program
