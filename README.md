@@ -1,4 +1,4 @@
-#simbly
+# simbly
 
 Multithreaded runtime for a simble dynamically typed assembly-like language. All variables are of type integer or array of integers. Has a small shell and supports running multiple programs simultaneously.
 
