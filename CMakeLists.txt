@@ -27,7 +27,6 @@ if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release)
 endif(NOT CMAKE_BUILD_TYPE)
 
-set(CMAKE_VERBOSE_MAKEFILE ON)
 set(CMAKE_REQUIRED_DEFINITIONS "-D=_GNU_SOURCE")
 check_symbol_exists(strtok_r "string.h" HAVE_STRTOK_R)
 
