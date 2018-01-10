@@ -1,0 +1,3 @@
+[submodule "libvoids"]
+	path = libvoids
+	url = https://github.com/Gikoskos/libvoids
