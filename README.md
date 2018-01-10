@@ -35,9 +35,17 @@ Sample programs that implement various concurrency problems can be found in the 
 
 ## Building
 
-Supported OS is Linux and compiler is gcc. Might work on BSD too but I haven't tested it there.
+Supported OS is Linux and compiler is gcc. Might work on BSD too but it hasn't been tested there.
 
-External dependency is [libvoids](https://github.com/Gikoskos/libvoids) which I'm using for all the data structures in the program. There are pre-compiled binaries in the folder `external` but if those don't work with your distro, you have to download the library and compile it on your own machine.
+External dependency is [libvoids](https://github.com/Gikoskos/libvoids) which is used for all the data structures in the program. Clone this repository with the `recursive` flag:
+
+`git clone --recursive https://github.com/Gikoskos/simbly`
+
+to download all the submodules.
+
+Build system is cmake:
+
+`mkdir build && cd build && cmake ..`
 
 ## How to use
 
