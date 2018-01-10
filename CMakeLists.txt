@@ -23,6 +23,11 @@ set(SIMBLY_INC src//error.h
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
 
+if(NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE Release)
+endif(NOT CMAKE_BUILD_TYPE)
+
+set(CMAKE_VERBOSE_MAKEFILE ON)
 set(CMAKE_REQUIRED_DEFINITIONS "-D=_GNU_SOURCE")
 check_symbol_exists(strtok_r "string.h" HAVE_STRTOK_R)
 
@@ -39,14 +44,14 @@ if(${HAVE_STRTOK_R})
 
         target_link_libraries(simbly voids Threads::Threads)
 
-        if(NOT CMAKE_BUILD_TYPE)
-            set(CMAKE_BUILD_TYPE Release)
-        endif(NOT CMAKE_BUILD_TYPE)
+        target_compile_options(simbly PRIVATE -Wall -Wextra -pedantic)
 
-        target_compile_options(voids PRIVATE -Wall -Wextra -pedantic)
+        target_compile_definitions(simbly PRIVATE "_GNU_SOURCE")
 
         if(CMAKE_BUILD_TYPE MATCHES Debug)
-            target_compile_options(voids BEFORE PRIVATE -g)
+            target_compile_options(simbly BEFORE PRIVATE -g)
+        else(CMAKE_BUILD_TYPE MATCHES Debug)
+            target_compile_options(simbly BEFORE PRIVATE -O3)
         endif(CMAKE_BUILD_TYPE MATCHES Debug)
 
     else(${HAVE_GET_NPROCS})
