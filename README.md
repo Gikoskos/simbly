@@ -45,7 +45,7 @@ to download all the submodules.
 
 Build system is cmake:
 
-`mkdir build && cd build && cmake ..`
+`mkdir build && cd build && cmake .. && make`
 
 ## How to use
 

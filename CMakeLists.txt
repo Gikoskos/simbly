@@ -23,21 +23,36 @@ set(SIMBLY_INC src//error.h
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
 
-include_directories(include libvoids/lib/include)
+set(CMAKE_REQUIRED_DEFINITIONS "-D=_GNU_SOURCE")
+check_symbol_exists(strtok_r "string.h" HAVE_STRTOK_R)
 
-add_executable(simbly ${SIMBLY_SRC} ${SIMBLY_INC} ${LIBVOIDS_INC})
-set_property(TARGET simbly PROPERTY C_STANDARD 99)
+if(${HAVE_STRTOK_R})
 
-target_link_libraries(simbly voids Threads::Threads)
+    check_symbol_exists(get_nprocs "sys/sysinfo.h" HAVE_GET_NPROCS)
 
-if(NOT CMAKE_BUILD_TYPE)
-   set(CMAKE_BUILD_TYPE Release)
-endif(NOT CMAKE_BUILD_TYPE)
+    if(${HAVE_GET_NPROCS})
 
-if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
-    target_compile_options(voids PRIVATE -Wall -Wextra -pedantic)
+        include_directories(include libvoids/lib/include)
 
-    if(CMAKE_BUILD_TYPE MATCHES Debug)
-        target_compile_options(voids BEFORE PRIVATE -g)
-    endif(CMAKE_BUILD_TYPE MATCHES Debug)
-endif(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
+        add_executable(simbly ${SIMBLY_SRC} ${SIMBLY_INC} ${LIBVOIDS_INC})
+        set_property(TARGET simbly PROPERTY C_STANDARD 99)
+
+        target_link_libraries(simbly voids Threads::Threads)
+
+        if(NOT CMAKE_BUILD_TYPE)
+            set(CMAKE_BUILD_TYPE Release)
+        endif(NOT CMAKE_BUILD_TYPE)
+
+        target_compile_options(voids PRIVATE -Wall -Wextra -pedantic)
+
+        if(CMAKE_BUILD_TYPE MATCHES Debug)
+            target_compile_options(voids BEFORE PRIVATE -g)
+        endif(CMAKE_BUILD_TYPE MATCHES Debug)
+
+    else(${HAVE_GET_NPROCS})
+        message(FATAL_ERROR "Couldn't find get_nprocs")
+    endif(${HAVE_GET_NPROCS})
+
+else(${HAVE_STRTOK_R})
+    message(FATAL_ERROR "Couldn't find strtok_r")
+endif(${HAVE_STRTOK_R})
