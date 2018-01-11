@@ -63,7 +63,7 @@ void err_msg(program_s *prog, const char *fmt, ...)
             lin = prog->line;
         }
 
-        fprintf(stderr, "%s:%u:%u: %serror:%s ", prog->fname, lin, col, TERM_RED, TERM_RESET);
+        fprintf(stderr, "%s:%u:%u: " TERM_RED "error: " TERM_RESET, prog->fname, lin, col);
         va_start(args, fmt);
 
         vfprintf(stderr, fmt, args);
@@ -87,7 +87,7 @@ void warn_msg(program_s *prog, const char *fmt, ...)
             lin = prog->line;
         }
 
-        fprintf(stderr, "%s:%u:%u: %swarning:%s ", prog->fname, lin, col, TERM_YEL, TERM_RESET);
+        fprintf(stderr, "%s:%u:%u: " TERM_YEL "warning: " TERM_RESET, prog->fname, lin, col);
 
         va_start(args, fmt);
 
@@ -112,7 +112,7 @@ void dbg_msg(program_s *prog, const char *fmt, ...)
             lin = prog->line;
         }
 
-        fprintf(stderr, "%s:%u:%u: %sdebug:%s ", prog->fname, lin, col, TERM_CYAN, TERM_RESET);
+        fprintf(stderr, "%s:%u:%u: " TERM_CYAN " debug: " TERM_RESET, prog->fname, lin, col);
 
         va_start(args, fmt);
 
@@ -127,11 +127,11 @@ void shell_msg(const char *fmt, ...)
 {
     va_list args;
 
-    fprintf(stdout, "%s", TERM_YEL);
+    fprintf(stdout, TERM_YEL);
 
     va_start(args, fmt);
     vfprintf(stdout, fmt, args);
     va_end(args);
 
-    fprintf(stdout, "%s\n", TERM_RESET);
+    fprintf(stdout, TERM_RESET "\n");
 }
