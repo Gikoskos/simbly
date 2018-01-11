@@ -558,6 +558,7 @@ void load_handler(program_s *prog, instruction_id_e ins_code)
         if (!__varval_get_value(prog,
                                 ((int_arr_tok_s*)global_tok->data.ptr)->idx_type,
                                 &((int_arr_tok_s*)global_tok->data.ptr)->idx, 0, &tmp)) {
+            free_token(global_tok);
             return;
         }
 
@@ -593,6 +594,7 @@ void store_handler(program_s *prog, instruction_id_e ins_code)
         if (!__varval_get_value(prog,
                                 ((int_arr_tok_s*)global_tok->data.ptr)->idx_type,
                                 &((int_arr_tok_s*)global_tok->data.ptr)->idx, 0, &tmp)) {
+            free_token(global_tok);
             return;
         }
 
@@ -807,6 +809,7 @@ void semaphore_handler(program_s *prog, instruction_id_e ins_code)
         if (!__varval_get_value(prog,
                                 ((int_arr_tok_s*)global_tok->data.ptr)->idx_type,
                                 &((int_arr_tok_s*)global_tok->data.ptr)->idx, 0, &tmp)) {
+            free_token(global_tok);
             return;
         }
         idx = tmp;
@@ -842,6 +845,7 @@ void sleep_handler(program_s *prog, instruction_id_e ins_code)
     SET_PARSER_IDX(prog, tok);
 
     if (!__varval_get_value(prog, tok->type, &tok->data, tok->len, &sleep_duration)) {
+        free_token(tok);
         return;
     }
 
